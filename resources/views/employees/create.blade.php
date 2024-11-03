@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> curd</title>
+    <title>laravel crud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
@@ -16,16 +16,13 @@
     <div class="container">
         <div class="row justify-content-center mt-4">
             <div class="col-md-10 d-flex justify-content-end">
-                {{-- <a href="{{route('employees')}}" class="btn btn-dark">Back</a> --}}
+                <a href="{{ route('employees.index') }}" class="btn btn-dark">Back</a>
         </div>
     </div>
         <div class="row d-flex justify-content-center">
             <div class="col-md-10">
                 <div class="card border-0 shadow-lg my-3">
-                    <div class="card-header bg-dark">
-                        <h3 class="text-white text-center">Create record</h3>
-                    </div>
-                    <form  action="{{route('employees.create')}}" method="post">
+                    <form  action="{{ route('employees.store') }}" method="post">
                         @csrf
                     <div class="card-body">
                         <div class="mb-3">

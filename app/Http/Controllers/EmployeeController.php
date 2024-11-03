@@ -10,12 +10,10 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
 {
-   
-    $status = $request->get('status', 'active');  
-    $is_active = $status === 'active' ? 1 : 0;
-    $employees = Employees::where('is_active', $is_active)->get();
-
-    return view('employees.index', compact('employees', 'status'));
+  
+        $employees = Employees::all();
+    
+        return view('employees.index', compact('employees'));
 }
 
 
@@ -31,7 +29,7 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $employee = Employees::findOrFail($id);
-        return response()->json($employee); 
+        return view('employees.view',compact('employee'));
     }
 
     public function store(Request $request)
@@ -51,35 +49,37 @@ class EmployeeController extends Controller
         $data['is_active'] = $request->status === 'active' ? 1 : 0;
     
         $employee = Employees::create($data);
-        return redirect()->route('employees.index')
-                         ->with('success', 'Employee created successfully.');
+        return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
     }
 
     public function update(Request $request, $id)
-{
-    $employee = Employees::findOrFail($id);
+    {
+        $employee = Employees::findOrFail($id);
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email,' . $employee->id,
+            'mobile' => 'required|string|max:15',
+            'salary' => 'required|numeric',
+            'status' => 'in:active,inactive',
+        ]);
     
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:employees,email,' . $employee->id,
-        'mobile' => 'required|string|max:15',
-        'salary' => 'required|numeric',
-        'status' => 'in:active,inactive',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+    
+        $employee->update($request->all());
+    
+        return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
     }
-
-    $employee->update($request->all());
-    return redirect()->back()->with('success', 'Employee updated successfully.');
-}
-
-
+    
     public function destroy($id)
     {
         $employee = Employees::findOrFail($id);
         $employee->delete();
-        return  redirect()->route('employees.index')->with('success', 'Employee deleted successfully.');
+        
+        return response()->json(['message' => 'Employee deleted successfully.']);
     }
+    
+
 }
