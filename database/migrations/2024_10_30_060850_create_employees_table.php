@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string(column: 'name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('mobile');
             $table->string('password');
+            $table->boolean('is_active')->default(1);
             $table->string('salary');
-            $table->enum('status', ['active', 'inactive']);
             $table->timestamps();
         });
     }
@@ -27,8 +27,13 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('employees');
+        Schema::table('employees', function (Blueprint $table) {
+            // $table->dropColumn('department'); 
+        });
     }
+
+
+
 };

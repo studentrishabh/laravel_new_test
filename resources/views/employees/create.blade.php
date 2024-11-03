@@ -1,133 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee crud</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-</head>
-<body>
-    <div class="container mt-5">
-        <h2>Employee crud</h2>
-        <a href="{{route('employees.store')}}" class="btn btn-primary" id="addEmployee" >Add Employee</a>
-        <table class="table table-bordered" id="employeeTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Salary</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
 
-    <!-- Modal for Adding/Editing Employee -->
-    <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Add</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="employeeForm" action="{{ route('employees.store') }}" method="get">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> curd</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="bg-dark py-3">
+        <h3 class="text-white text-center">Crud Laravel</h3>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10 d-flex justify-content-end">
+                {{-- <a href="{{route('employees')}}" class="btn btn-dark">Back</a> --}}
+        </div>
+    </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10">
+                <div class="card border-0 shadow-lg my-3">
+                    <div class="card-header bg-dark">
+                        <h3 class="text-white text-center">Create record</h3>
+                    </div>
+                    <form  action="{{route('employees.create')}}" method="post">
                         @csrf
-                        <input type="hidden" id="employeeId">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" name="name" required>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label h5">Name</label>
+                                <input value="{{old('name')}}" type="text" class=" @error('name') is-invalid @enderror form-control form-control-sm" name="name" id=""
+                                    aria-describedby="helpId" placeholder="name" />
+                                    @error('name')
+                                        <p class="invalid-feedback">{{$message}}</p>
+                                    @enderror
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" name="email" required>
+                        <div class="mb-3">
+                            <label for="text" class="form-label h5">Email</label>
+                                <input value="{{old('email')}}" type="text" class="  @error('email') is-invalid @enderror form-control form-control-sm" name="email" id="email"
+                                    aria-describedby="helpId" placeholder="email" />
+                                    @error('email')
+                                    <p class="invalid-feedback">{{$message}}</p>
+                                @enderror
                         </div>
-                        <div class="form-group">
-                            <label>Mobile</label>
-                            <input type="text" class="form-control" name="mobile" required>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label h5">Mobile</label>
+                                <input value="{{old('mobile')}}" type="phone" class=" @error('mobile') is-invalid @enderror form-control form-control-sm" name="mobile" id=""
+                                    aria-describedby="helpId" placeholder="mobile" />
+                                    @error('mobile')
+                                        <p class="invalid-feedback">{{$message}}</p>
+                                    @enderror
                         </div>
-                        <div class="form-group">
-                            <label>Salary</label>
-                            <input type="text" class="form-control" name="salary" required>
+                        <div class="mb-3">
+                            <label for="number" class="form-label h5">Salary</label>
+                                <input value="{{old('salary')}}" type="number" class=" @error('salary') is-invalid @enderror form-control form-control-sm" name="salary" id=""
+                                    aria-describedby="helpId" placeholder="salary" />
+                                    @error('salary')
+                                        <p class="invalid-feedback">{{$message}}</p>
+                                    @enderror
                         </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                        <div class="mb-3">
+                            <label for="status" class="form-label h5">Status</label>
+                            <select name="is_active" id="is_active" 
+                                    class="form-select form-control-sm @error('status') is-invalid @enderror" required>
+                                    <option value="active" {{ old('is_active') == 'active' ? 'selected' : '' }}>Select</option>
+                                <option value="active" {{ old('is_active') == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ old('is_active') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                             </select>
+                            @error('is_active')
+                                <p class="invalid-feedback">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        <div class="d-gird">
+                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                         </div>
+                    </div>
                     </form>
-                    <div id="errorMessages" class="mt-2"></div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            const employeeTable = $('#employeeTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('employees.store') }}",
-                columns: [
-                    { data: 'name' },
-                    { data: 'email' },
-                    { data: 'mobile' },
-                    { data: 'status' },
-                    { data: 'action', orderable: false, searchable: false }
-                ]
-            });
-
-            // Open modal for adding employee
-            $('#addEmployee').on('click', function() {
-                $('#employeeModal').modal('show');
-                $('#employeeForm')[0].reset();
-                $('#employeeId').val('');
-                $('#modalTitle').text('Add Employee');
-                $('#errorMessages').html('');
-            });
-
-            // Submit form for add/edit
-            $('#employeeForm').on('submit', function(e) {
-                e.preventDefault();
-                const id = $('#employeeId').val();
-                const url = id ? `employees/${id}` : 'employees';
-                const method = id ? 'PUT' : 'POST';
-
-                $.ajax({
-                    url: url,
-                    method: method,
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        $('#employeeModal').modal('hide');
-                        employeeTable.ajax.reload();
-                        alert(response.success);
-                    },
-                    error: function(xhr) {
-                        $('#errorMessages').html('');
-                        if (xhr.responseJSON.errors) {
-                            $.each(xhr.responseJSON.errors, function(key, value) {
-                                $('#errorMessages').append(`<div class="alert alert-danger">${value}</div>`);
-                            });
-                        }
-                    }
-                });
-            });
-
-            // Edit employee
-            $(document).on('click', '.edit', function() {
-                const id = $(this).data('id');
-                $.get(`employees/${id}`, function(employee) {
-                    $('#employeeId').val(employee
+</body>
+</html>

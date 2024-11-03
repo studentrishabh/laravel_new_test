@@ -8,17 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Employees extends Model
 {
     use HasFactory;
-
-    // Specify the fillable fields
-    protected $fillable = [
+    
+    protected $table = 'employees'; 
+        protected $fillable = [
         'name',
         'email',
         'mobile',
+        'is_active',
         'salary',
-        'status',
     ];
 }
-
-
-
-

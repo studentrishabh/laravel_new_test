@@ -18,14 +18,14 @@ Route::get('/', function () {
 });
 
 
-    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index'); // List all employees
-    Route::get('employees/{id}', [EmployeeController::class, 'show'])->name('employees.show'); // Fetch employee data
-    Route::post('employees/create', [EmployeeController::class, 'store'])->name('employees.store'); // Create a new employee
-    Route::put('employees/{id}', [EmployeeController::class, 'update'])->name('employees.update'); // Update an existing employee
-    Route::delete('employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy'); // Delete an employee
+Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
+Route::get('employees/create', [EmployeeController::class, 'create'])->name('employees.create');
+Route::post('employees/index', [EmployeeController::class, 'store'])->name('employees.index'); 
+Route::get('employees/{id}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
+// Route::put('employees/{id}', [EmployeeController::class, 'update'])->name('employees.index');
+Route::put('employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
 
-
-
+Route::delete('employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
 
 // Route for getting all posts
